@@ -2,4 +2,4 @@ Snið A til suðurs frá norðurenda friðlandsins var gengið að fullu en sni�
 
 Gögnin eru slegin inn í snid.csv
 Atferli er skráð eigi það við (það á oftast við),
-sé um par að ræða er ein röð fyrir sitthvorn fuglinn og dálkurinn "par" er logical með einum fyrir þá fugla sem eru í pörum en NA fyrir alla aðra.
+sé um par að ræða er ein röð fyrir sitthvorn fuglinn og dálkurinn "par" er boolean með "1" fyrir þá fugla sem eru í pörum en "NA" fyrir alla aðra.

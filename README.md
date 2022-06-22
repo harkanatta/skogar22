@@ -1,21 +1,26 @@
 Skógar
 ===
 
-###### tags: `NNV` `Vöktun náttúruverndarsvæða` `2021` `Skagafjörður` `feltbók` `forkönnun`
+###### tags: `NNV` `Vöktun lykilþátta` `2022` `Skagafjörður` `feltbók` `fuglatalning`
 
 ## Feltbók - ekki tilbúin
 
 :::info
-- **Dagsetning:** 9. júní, 2021, 18:30-23:20
+- **Dagsetning:** 13. júní, 2022, 17:50-00:30
 - **Umsjón:**
 [name=Einar]
 [name=Valtýr]
-[name=Skotta] :poodle:
-- **Veður:** Milt og gott og skýjað :cloud:, mistur.
+[name=Skotta (í bandi)] :poodle:
+- **Veður:** Milt og gott og skýjað :cloud:.
     - Snið A 1m/sek, 10°C, smá dropar úr lofti
-    - Snið B 1m/sek, 8°C
-- :memo: ...eitthvað?
-- gögn: https://github.com/harkanatta/skogar21
+    - Snið B svipað
+- :memo: 
+    - Of langt til að taka á einum degi. „Fuglatíminn“ er liðinn þegar komið er í snið B og þeir að mestu þagnaðir. Betra væri að ganga hálft snið A fram eftir og svo hálft snið B til baka. 
+    - Snið A til suðurs frá norðurenda friðlandsins var gengið að fullu en snið B var eilítið endasleppt þar sem annar talningamaðurinn var haltur og þurfti að stytta sér leið. Einnig var snið B gengið meðfram ánni svo það er ekki marktækt.
+    - Gögnin eru slegin inn í snid.csv: Atferli er skráð í viðeigandi dálk (stundum ekk),
+sé um par að ræða er ein röð fyrir sitthvorn fuglinn og dálkurinn "par" er boolean með "1" fyrir þá fugla sem eru í pörum en "NA" fyrir alla aðra.
+
+- gögn: https://github.com/harkanatta/skogar22
 
 :::
 

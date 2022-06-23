@@ -1,21 +1,20 @@
+---
+title: "Myndir"
+author: "Valtýr Sigurðsson"
+date: '2022-06-23'
+output: html_document
+---
 
-freadClip <- function(...) {
-  X <- tempfile()
-  writeLines(readLines("clipboard"), X)
-  data.table::fread(X, header=F, ...)
-}
+```{r setup, include=FALSE}
+library(tidyverse)
+library(plyr)
+library(ggtextures)
+library(magick)
 
 Sys.setlocale("LC_ALL", "Icelandic")
-
-
-talning <- structure(list(isl_heiti  = c("Dílaskarfur", "Himbrimi", "Lómur", "Æður", 
-                              "Hávella", "Toppönd", "Stokkönd", "Teista", "Hvítmáfur", "Svartbakur", 
-                              "Bjartmáfur", "Silfurmáfur", "Tildra", "Tjaldur", "Skógarþröstur", 
-                              "Svartþröstur", "Stari", "Hrafn", "Snjótittlingur"), fjoldi  = c(8L, 
-                                                                                          1L, 6L, 267L, 105L, 5L, 34L, 4L, 9L, 27L, 58L, 9L, 11L, 1L, 1L, 
-                                                                                          2L, 40L, 18L, 27L)), row.names = c(NA, -19L), class = "data.frame")
-talning <- as_tibble(talning) %>% arrange(isl_heiti)
-
+sysfonts::font_add_google("Catamaran", "Catamaran")
+showtext::showtext_auto()
+gogn <- readr::read_csv("https://raw.githubusercontent.com/harkanatta/skogar22/main/gogn/snid.csv", locale = locale("is",encoding = "latin1"))
 fuglar <- structure(list(isl_heiti = c("Bjartmáfur", "Dvergmáfur", "Fjallkjói", 
                                 "Fjöruspói", "Geirfugl", "Haftyrðill", "Heiðlóa", "Hettumáfur", 
                                 "Hrossagaukur", "Hvítmáfur", "Jaðrakan", "Kjói", "Kría", "Langvía", 
@@ -64,45 +63,84 @@ fuglar <- structure(list(isl_heiti = c("Bjartmáfur", "Dvergmáfur", "Fjallkjói
                                                                                                                                -93L), class = "data.frame")
 
 fuglar <- as_tibble(fuglar) %>% arrange(isl_heiti)
+```
 
-myndalisti <- fuglar[fuglar$isl_heiti %in% talning$isl_heiti,]
+## Fyrir töflu í feltbók
+```{r cars}
+data <- gogn %>% 
+  mutate(tegund=str_to_sentence(tolower(tegund))) %>% 
+  ddply(.(tegund,snid),summarise,N=table(tegund)) %>% 
+  mutate(N=as.double(N))
+knitr::kable(data,"markdown")
 
-lausnin: https://ropensci.org/blog/2018/09/04/birds-taxo-traits/
+```
 
-library(rphylopic)
-get_results <- function(name){
-  id <- rphylopic::name_search(name)
-  rphylopic::name_images(id$canonicalName[1,1])
-}
-C <- list()
-B <- list()
-A <- list()
-for (i in myndalisti$latn_heiti) {
-  A <- try(get_results(i))
-  #C[i] <- A
-  B[i] <- unlist(A)[[1]] 
-}
+## Litlar myndir voru sóttar á phylopic.org eftir tilraunir með rphylopic (sjá skissur.R)
+
+# Myndir
+
+# Mynd 1:
+
+```{r myndtalning}
+data <- gogn %>% 
+  mutate(tegund=str_to_sentence(tolower(tegund))) %>% 
+  ddply(.(tegund),summarise,N=table(tegund)) %>% 
+  mutate(N=as.double(N))
+DF <- tibble(
+  fjöldi = data$N,
+  tegund = unique(data$tegund),
+  image = list.files("./thumbs",full.names = T) %>% 
+    as.list() %>%
+    map(function(x) image_read(x))
+  )
+
+f1 = "Catamaran"
+p <- ggplot(DF, aes(tegund, fjöldi, image = image)) +
+  geom_isotype_col(
+    img_height = grid::unit(1, "null"), img_width = NULL,
+    ncol = 1, nrow = 1, hjust = 1, vjust = 0.5,
+    colour = "#76653BFF"
+  ) +
+  coord_flip() +
+  guides(fill = "none") +
+  theme_classic(base_family = f1,
+                base_size=80,
+                base_line_size = .3,
+                base_rect_size = 2)
+
+png(here::here(paste0("talning", format(Sys.time(), "%Y%m%d_%H%M%S"), ".png")), res = 320, height = 9, width = 12, units = "in")
+p
+dev.off()
+
+```
 
 
-myndalisti$slod <- B
+```{r myndfjarlaegd}
+data <- gogn %>% mutate(tegund=str_to_sentence(tolower(tegund)),
+                        fjarlaegd = fct_relevel(fjarlaegd,
+                                                "0-25",
+                                                "25-50",
+                                                "50-100",
+                                                "100+")) %>% 
+  ddply(.(tegund,fjarlægð=fjarlaegd),summarise,fjöldi=table(tegund)) %>% 
+  mutate(fjöldi=as.double(fjöldi))
 
-rass <- B[!is.na(B)] %>% 
-  unname() %>%
-  map(function(x) image_data(x, size = 128)[[1]]) %>% 
-  map(function(x) save_png(x))
+p2 <- ggplot(data, aes(x=tegund, y=fjöldi, fill=fjarlægð)) +
+  geom_bar(stat='identity', position='dodge') +
+  theme_minimal(base_family = f1,
+                base_size=80,
+                base_line_size = .3,
+                base_rect_size = 2) +
+  coord_flip() +
+  #theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  harrypotter::scale_fill_hp(discrete = TRUE, option = "ronweasley2", name = "fjarlægð") 
 
-for (i in 1:length(B)) {
-  image_data(unname(B[i]), size = 128)[[1]] %>% save_png(target = glue::glue("C:/Users/valty/Desktop/New folder/",myndalisti$isl_heiti[i],".png"))
-}
+png(here::here(paste0("fjarlaegd", format(Sys.time(), "%Y%m%d_%H%M%S"), ".png")), res = 320, height = 9, width = 12, units = "in")
+p2
+dev.off()
 
 
-myndalisti[myndalisti$latn_heiti %in% B[is.na(B)]]
-
-install.packages("wikitaxa")
+```
 
 
 
-library(tidyverse)
-library(plyr)
-landings <- read_csv("C:/Users/BioPol VS/Downloads/ICESDataPortalDownload_SAG_36f64919-f4a9-4fba-af7b-055b79b949b2/StockAssessmentGraphs_2022126.csv
-")

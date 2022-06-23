@@ -83,26 +83,31 @@ Við vorum mættir á svæðið um kl. 18 og fengum bát hjá æðarbónda á sv
 
 |tegund         |snid |  N|
 |:--------------|:----|--:|
-|hrossagaukur   |a    | 15|
-|hrossagaukur   |b    | 10|
-|jaðrakan       |a    | 16|
-|jaðrakan       |b    |  9|
-|kjói           |a    | 12|
-|kjói           |b    |  2|
-|lóa            |a    |  7|
-|lóa            |b    | 12|
-|lóuþræll       |a    |  9|
-|lóuþræll       |b    | 18|
-|óðinshani      |a    |  6|
-|óðinshani      |b    | 23|
+|álft           |a    |  6|
+|grágæs         |a    |  3|
+|grágæs         |b    |  2|
+|hrossagaukur   |a    | 17|
+|hrossagaukur   |b    |  6|
+|jaðrakan       |a    | 10|
+|jaðrakan       |b    | 10|
+|kjói           |a    |  8|
+|kría           |a    |  2|
+|lóa            |a    |  3|
+|lóuþræll       |a    |  6|
+|lóuþræll       |b    | 32|
+|óðinshani      |a    | 11|
+|óðinshani      |b    | 10|
 |rjúpa          |a    |  3|
-|rjúpa          |b    |  2|
-|spói           |a    | 41|
-|spói           |b    | 30|
-|stelkur        |a    |  1|
-|stelkur        |b    |  3|
-|þúfutittlingur |a    | 12|
-|þúfutittlingur |b    |  1|
+|sílamáfur      |a    |  1|
+|spói           |a    | 43|
+|spói           |b    | 32|
+|stelkur        |a    |  3|
+|stelkur        |b    | 11|
+|stokkönd       |a    |  2|
+|stormmáfur     |a    |  2|
+|urtönd         |a    |  2|
+|þúfutittlingur |a    | 14|
+|þúfutittlingur |b    |  5|
 
 ---
 

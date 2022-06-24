@@ -6,30 +6,37 @@ library(magick)
 Sys.setlocale("LC_ALL", "Icelandic")
 sysfonts::font_add_google("Catamaran", "Catamaran")
 showtext::showtext_auto()
-gogn <- readr::read_csv("https://github.com/harkanatta/skogar21/raw/main/fuglasnid/snid.csv", locale = locale("is",encoding = "latin1"))
+gogn <- readr::read_csv("https://raw.githubusercontent.com/harkanatta/skogar22/main/gogn/snid.csv", locale = locale("is",encoding = "latin1"))
 
+# Fyrir töflu í feltbók
 data <- gogn %>% 
+  mutate(tegund=tolower(tegund)) %>% 
+  ddply(.(tegund,snid),summarise,N=table(tegund)) %>% 
+  mutate(N=as.double(N))
+knitr::kable(data,"markdown")
+
+# Litlar myndir (phylopic)
+data <- as_tibble(data) %>% arrange(tegund)
+
+
+
+# Fyrir myndir
+data <- gogn %>% 
+  mutate(tegund=tolower(tegund)) %>% 
   ddply(.(tegund),summarise,N=table(tegund)) %>% 
   mutate(N=as.double(N))
 
   
 #---
-#Mynd 1:
+# Mynd 1:
 
-  DF <- tibble(
-    fjöldi = data$N,
-    tegund = unique(data$tegund),
-    image = list(image_read(list.files("./myndir",full.names = T)[1]),
-                 image_read(list.files("./myndir",full.names = T)[2]),
-                 image_read(list.files("./myndir",full.names = T)[3]),
-                 image_read(list.files("./myndir",full.names = T)[4]),
-                 image_read(list.files("./myndir",full.names = T)[5]),
-                 image_read(list.files("./myndir",full.names = T)[6]),
-                 image_read(list.files("./myndir",full.names = T)[7]),
-                 image_read(list.files("./myndir",full.names = T)[8]),
-                 image_read(list.files("./myndir",full.names = T)[9]),
-                 image_read(list.files("./myndir",full.names = T)[10]))
-    )
+DF <- tibble(
+  fjöldi = data$N,
+  tegund = unique(data$tegund),
+  image = list.files("./thumbs",full.names = T) %>% 
+    as.list() %>%
+    map(function(x) image_read(x))
+  )
 
 f1 = "Catamaran"
 p <- ggplot(DF, aes(tegund, fjöldi, image = image)) +
